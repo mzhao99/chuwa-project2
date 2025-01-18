@@ -7,6 +7,11 @@ const userSchema = new Schema({
     required: true, 
     unique: true 
   },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: { 
     type: String, 
     required: true 
@@ -15,6 +20,20 @@ const userSchema = new Schema({
     type: String, 
     required: true 
   },
+  registration: {
+    token: { 
+      type: String,
+      required: true 
+    },
+    status: { 
+      type: String, 
+      required: true
+    },
+    expiresAt: { 
+      type: Date,
+      required: true
+    }
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);
