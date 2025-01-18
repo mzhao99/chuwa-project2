@@ -24,7 +24,12 @@ export default function LoginPage() {
       }, 1000);
     } catch (e) {
       // TODO: handle error 
-      setError("Invalid username or password");
+      if (error?.response?.status === 400 && error?.response?.data?.message === 'Invalid Credentials') {
+        setError("Invalid username or password");
+      } else {
+        navigate('/error');
+      }
+      
       setLoading(false);
     } 
   };
