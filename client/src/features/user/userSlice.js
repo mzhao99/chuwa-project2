@@ -1,4 +1,4 @@
-import {login, signup } from '../../api/auth';
+// import {login, signup } from '../../api/auth';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async (credentials, {rejectWithValue}) => {
     try {
-      return await login(credentials);
+      // return await login(credentials);
     } catch (err) {
       if (!err.response) {
         throw err;
@@ -27,7 +27,7 @@ export const signupUser = createAsyncThunk(
   'user/signup',
   async (signupFormData, {rejectWithValue}) => {
     try {
-      return await signup(signupFormData);
+      // return await signup(signupFormData);
     } catch (err) {
       if (!err.response) {
         throw err;

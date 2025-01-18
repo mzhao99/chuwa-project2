@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/Auth/LoginPage";
+import RegistrationPage from "./pages/Auth/RegistrationPage";
 
 const App = () => {
   return (
@@ -10,7 +11,7 @@ const App = () => {
       {/* <ContentWrapper> */}
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          {/* <Route path="/signup" element={<SignupPage />} /> */}
+          <Route path="/register/:token" element={<RegistrationPage />} />  
 
         <Route path="/" element={<ProtectedRoute />}>
           {/* <Route index element={<HomePage />} /> */}

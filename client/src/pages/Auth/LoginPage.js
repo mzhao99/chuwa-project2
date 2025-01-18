@@ -16,13 +16,14 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      // add log in feature here
+      // TODO: add log in feature here
       console.log("Log in success: ", data);
       setTimeout(() => {
         setSuccess(true);
-        setTimeout(() => navigate('/'), 1500);
-      }, 1500);
+        setTimeout(() => navigate('/'), 1000);
+      }, 1000);
     } catch (e) {
+      // TODO: handle error 
       setError("Invalid username or password");
       setLoading(false);
     } 
@@ -48,6 +49,7 @@ export default function LoginPage() {
         <InputField
           name="password"
           type="password"
+          isPassword={true}
           {...register("password", {required: "Password is required"},)}
         />
         {errors.password && (

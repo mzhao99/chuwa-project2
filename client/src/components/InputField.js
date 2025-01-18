@@ -12,59 +12,45 @@ const CustomizedInput = styled(TextField)(({ height, fontSize }) => ({
       borderColor: "#5048E5",
     },
   },
-  "&.Mui-error fieldset": {
-    borderColor: "#FC5A44",
-  },
-  "& .MuiFormHelperText-root": {
-    fontSize: "14px",
-    color: "#FC5A44",
-    textAlign: "right",
-  },
 }));
 
-export default function InputField({
-  height,
-  fontSize,
-  error,
-  helperText,
-  isPassword,
-  onChange,
-  name,
-  value,
-}) {
-  const [showPassword, setShowPassword] = useState(false);
+const InputField = React.forwardRef(({ height, fontSize, isPassword, onChange, name, value, ...props }, ref) => {
+    const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
+    const handleClickShowPassword = () => {
+      setShowPassword((show) => !show);
+    };
 
-  return (
-    <CustomizedInput
-      hiddenLabel
-      fullWidth
-      height={height}
-      fontSize={fontSize}
-      error={error}
-      helperText={helperText}
-      type={isPassword && !showPassword ? "password" : "text"}
-      onChange={onChange}
-      name={name}
-      value={value}
-      InputProps={{
-        endAdornment: isPassword ? (
-          <InputAdornment position="end">
-            <IconButton
-              aria-label={
-                showPassword ? 'display the password' : 'hide the password'
-              }
-              onClick={handleClickShowPassword}
-              edge="end"
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        ) : null,
-      }}
-    />
-  );
-}
+    return (
+      <CustomizedInput
+        hiddenLabel
+        fullWidth
+        height={height}
+        fontSize={fontSize}
+        type={isPassword && !showPassword ? "password" : "text"}
+        onChange={onChange}
+        name={name}
+        value={value}
+        InputProps={{
+          endAdornment: isPassword ? (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label={
+                  showPassword ? "display the password" : "hide the password"
+                }
+                onClick={handleClickShowPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ) : null,
+        }}
+        inputRef={ref} 
+        {...props} 
+      />
+    );
+  }
+);
+
+export default InputField;
