@@ -10,12 +10,11 @@ import "../../styles/AuthForm.css";
 
 export default function RegistrationPage() {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector(state => state.auth)
+  const { loading } = useSelector(state => state.auth)
   const navigate = useNavigate();
   const { token } = useParams(); 
 
   const [existingUserErr, setExistingUserErr] = useState(false);
-  const [isLinkValid, setIsLinkValid] = useState(true);
   const {
     register,
     handleSubmit,
@@ -57,25 +56,15 @@ export default function RegistrationPage() {
   };
 
   const onSubmit = async (data) => {
-    console.log("Form data being sent:", data);
     const formData = { ...data, token }; 
     try {
       const resultAction = await dispatch(registerUser(formData)).unwrap();
       if (resultAction) {
-        setTimeout(() => navigate("/dashboard"), 1000);
+        setTimeout(() => navigate("/login"), 1000);
       }
     } catch (error) {
-      console.error("Registration error:", error); 
-      if (
-        error?.response?.status === 400 &&
-        error?.response?.data?.message === "Username already exists"
-      ) {
+      if (error === "Username already exists") {
         setExistingUserErr("Username already exists");
-      } else if (
-        error?.response?.status === 400 &&
-        error?.response?.data?.message === "Email already exists"
-      ) {
-        setExistingUserErr("An account with this email already exists");
       } else {
         navigate("/error");
       }
@@ -84,23 +73,18 @@ export default function RegistrationPage() {
 
   useEffect(() => {
     if (token) {
-      dispatch(verifyLink(token))
-        .then(() => {
-          setIsLinkValid(true); 
-        })
+      dispatch(verifyLink(token)).unwrap()
         .catch(() => {
-          setIsLinkValid(false); 
+          navigate("/error", {
+            state: { errMsg: "The registration link is either expired or invalid. Please contact hr." },
+          });
         });
     }
-  }, [dispatch, token]);
+  }, [dispatch, token, navigate]);
 
 
   if (useSelector(state => state.auth.user)) {
     return <h3>Account registered successfully! Redirecting...</h3>;
-  }
-
-  if (isLinkValid === false) {
-    return <h3>The registration link is either expired or invalid.</h3>;
   }
 
   return (

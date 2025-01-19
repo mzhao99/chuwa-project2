@@ -9,7 +9,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("token", data.token);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Login failed");
+      return rejectWithValue(error);
     }
   }
 );
@@ -21,7 +21,7 @@ export const register = createAsyncThunk(
       const data = await registerUser(userData);
       return data.user;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Registration failed");
+      return rejectWithValue(error);
     }
   }
 );
@@ -33,7 +33,7 @@ export const logout = createAsyncThunk(
       await logoutUser();
       localStorage.removeItem("token");
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Logout failed");
+      return rejectWithValue(error);
     }
   }
 );
@@ -45,7 +45,7 @@ export const verifyLink = createAsyncThunk(
       const data = await verifyRegistrationLink(token);
       return data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Link verification failed");
+      return rejectWithValue(error);
     }
   }
 );

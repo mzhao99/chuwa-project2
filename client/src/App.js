@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegistrationPage from "./pages/Auth/RegistrationPage";
+import ErrorPage from "./pages/ErrorPage";
+import "./App.css";
 
 const App = () => {
   return (
@@ -13,12 +15,12 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register/:token" element={<RegistrationPage />} />  
 
-        <Route path="/" element={<ProtectedRoute />}>
-          {/* <Route index element={<HomePage />} /> */}
-        </Route>
+          <Route path="/" element={<ProtectedRoute />}>
+            {/* <Route index element={<HomePage />} /> */}
+          </Route>
 
-          {/* <Route path="/error" element={<ErrorPage />} />
-          <Route path="*" element={<ErrorPage />} /> */}
+          <Route path="/error" element={<ErrorPage />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       {/* </ContentWrapper> */}
       {/* <Footer /> */}
