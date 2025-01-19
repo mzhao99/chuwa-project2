@@ -6,7 +6,7 @@ const CustomFilledBtn = styled(Button)(({height, width, fontSize, fontWeight, di
   width: width || "auto",
   fontSize: fontSize || "16px",
   fontWeight: fontWeight || "600",
-  backgroundColor: "#00b4d8",
+  backgroundColor: "#052f55",
   textTransform: "none",
   disabled: disabled,
 }))
