@@ -5,6 +5,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
+    email: null,
     token: localStorage.getItem("token") || null,
     loading: false,
     error: null,
@@ -62,6 +63,7 @@ const authSlice = createSlice({
       })
       .addCase(verifyLink.fulfilled, (state, action) => {
         state.loading = false;
+        state.email = action.payload.id;
       })
       .addCase(verifyLink.rejected, (state, action) => {
         state.loading = false;
