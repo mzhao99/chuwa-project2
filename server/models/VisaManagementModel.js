@@ -7,7 +7,7 @@ const visaManagementSchema = new Schema({
     ref: "Employee", 
     required: true 
   },
-  status: { 
+  currentStepStatus: { 
     type: String, 
     required: true 
   },
