@@ -24,11 +24,8 @@ const Header = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // const { user, role } = useSelector((state) => state.user); // TODO: implement user slice
-  // TODO: Replace these with actual user data
-  const role = null; 
-  const user = null; 
-
+  const { user } = useSelector((state) => state.auth);
+  
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = (open) => () => {
@@ -43,18 +40,18 @@ const Header = () => {
           { label: "Visa Status Management", path: "/visa-status" },
           { label: "Hiring Management", path: "/hiring" },
         ],
-        employee: [
+        regular: [
           { label: "Home", path: "/dashboard" },
           { label: "Personal Information", path: "/personal-info" },
           { label: "Visa Status Management", path: "/visa-status" },
         ],
       }
-    : [{}];
+    : [];
 
   const renderMenu = () => (
     <Box sx={{ width: isMobile ? 250 : "auto" }} role="presentation">
       <List>
-        {(menuItems[role] || menuItems).map((item) => (
+        {(menuItems[user?.role] || menuItems).map((item) => (
           <ListItem key={item.path} disablePadding>
             <ListItemButton
               component={Link}
@@ -73,7 +70,7 @@ const Header = () => {
     <AppBar position="static" sx={{ backgroundColor: "#074e75" }}>
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          {user ? (role === "hr" ? "HR Dashboard" : "Employee Dashboard") : "Welcome"}
+          {user ? (user.role === "hr" ? "HR Dashboard" : "Employee Dashboard") : "Welcome"}
         </Typography>
         {isMobile ? (
           <>
@@ -95,7 +92,7 @@ const Header = () => {
           </>
         ) : (
           <Box sx={{ display: "flex", gap: 2 }}>
-            {(menuItems[role] || menuItems).map((item) => (
+            {(menuItems[user?.role] || menuItems).map((item) => (
               <Button
                 key={item.path}
                 component={Link}

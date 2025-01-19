@@ -122,13 +122,15 @@ const login = async (req, res, next) => {
     const payload = {
       user: {
         id: user._id,
+        email: user.email,
+        username: user.username,
         role: user.role,
       },
     };
     const token = await jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-    res.status(200).json({ token });
+    res.status(200).json({ token, user: payload.user });
   } catch (err) {
     next(err);
   }
