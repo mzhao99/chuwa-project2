@@ -58,10 +58,8 @@ export default function RegistrationPage() {
   const onSubmit = async (data) => {
     const formData = { ...data, token }; 
     try {
-      const resultAction = await dispatch(registerUser(formData)).unwrap();
-      if (resultAction) {
-        setTimeout(() => navigate("/login"), 1000);
-      }
+      await dispatch(registerUser(formData)).unwrap();
+      setTimeout(() => navigate("/login"), 1000);
     } catch (error) {
       if (error === "Username already exists") {
         setExistingUserErr("Username already exists");
