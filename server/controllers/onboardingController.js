@@ -59,7 +59,7 @@ const createOnboarding = async (req, res) => {
 const getOnboardingByEmployeeId = async (req, res) => {
   try {
     const { employeeId } = req.params;
-    const onboarding = await Onboarding.findOne({ employeeId });
+    const onboarding = await Onboarding.findOne({ employeeId }).populate('employeeId');
     
     if (!onboarding) {
       return res.status(404).json({ message: 'Onboarding form not found for this employee' });
@@ -88,4 +88,16 @@ const updateOnboardingById = async (req, res) => {
   }
 };
 
-module.exports = { createOnboarding, getOnboardingByEmployeeId, updateOnboardingById };
+const getAllOnboardings = async (req, res) => {
+  try {
+    const onboardings = await Onboarding.find().populate('employeeId');;
+    if (onboardings.length === 0) {
+      return res.status(404).json({ message: 'No onboarding forms found' });
+    }
+    return res.status(200).json(onboardings);
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+module.exports = { createOnboarding, getOnboardingByEmployeeId, updateOnboardingById, getAllOnboardings };

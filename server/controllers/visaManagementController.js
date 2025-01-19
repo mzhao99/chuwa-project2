@@ -80,4 +80,16 @@ const updateVisa = async (req, res) => {
   }
 };
 
-module.exports = { createVisa, getVisaByEmployeeId, updateVisa };
+const getAllVisas = async (req, res) => {
+  try {
+    const visas = await VisaManagement.find().populate("employeeId");
+    if (visas.length === 0) {
+      return res.status(404).json({ message: "No visa records found" });
+    }
+    res.status(200).json({ visas });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { createVisa, getVisaByEmployeeId, updateVisa, getAllVisas };
