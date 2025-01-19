@@ -139,6 +139,8 @@ const register = async (req, res, next) => {
     }
     // Check if token is still valid
     if (user.registration.status !== "sent" || user.registration.expiresAt < Date.now()) {
+      user.registration.status = "expired";
+      await user.save();
       return res.status(400).json({ message: "Token expired or already used" });
     }
     // Create new user
