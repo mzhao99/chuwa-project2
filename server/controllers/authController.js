@@ -50,7 +50,18 @@ const registerLinkSend = async (req, res, next) => {
     // Check if email exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+      // If token is expired, resend a token
+      if (existingUser.registration.status === "expired") {
+        const token = generateRegistrationToken(email);
+        existingUser.registration.token = token;
+        existingUser.registration.status = "sent";  
+        existingUser.registration.expiresAt = Date.now() + 3 * 60 * 60 * 1000;  
+        await existingUser.save();
+        await sendRegistrationEmail(email, name, token);  
+        return res.status(200).json({ message: "New registration email sent successfully" });
+      } else {
+        return res.status(400).json({ message: "Registration already completed or token is still valid" });
+      }
     }
 
     const token = generateRegistrationToken(email);
