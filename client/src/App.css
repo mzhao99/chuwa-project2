@@ -1,0 +1,16 @@
+.error-page {
+  width: 1300px;
+  height: 600px;
+  margin: 50px auto;
+  background-color: white;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .error-page {
+    text-align: center;
+  }
+}

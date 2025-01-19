@@ -1,17 +1,23 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const ProtectedRoute = ({ requiredRole }) => {
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const userRole = useSelector((state) => state.user.role); // set up role in redux store
+  const navigate = useNavigate();
+  const { user, token } = useSelector((state) => state.auth); 
+  const userRole = user?.role; 
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-  if (requiredRole && userRole !== requiredRole) {
-    return <Navigate to="/error" />;
-  }
+  useEffect(() => {
+    if (!user || !token) {
+      return navigate("/login");
+    }
+    if (requiredRole && userRole !== requiredRole) {
+      navigate("/error", {
+        state: { errMsg: "Access denied" },
+      });
+    }
+  }, [navigate, userRole, requiredRole, token, user]);
+
   return <Outlet />;
 };
 
