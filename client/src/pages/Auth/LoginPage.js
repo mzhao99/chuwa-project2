@@ -23,10 +23,10 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     try {
       await dispatch(login(data)).unwrap();
-      setIsSuccess(true); 
+      setIsSuccess(true);
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       if (error === "Invalid Credentials") {
         setError("Invalid username or password");
       } else {

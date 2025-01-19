@@ -10,7 +10,7 @@ import "../../styles/AuthForm.css";
 
 export default function RegistrationPage() {
   const dispatch = useDispatch();
-  const { loading } = useSelector(state => state.auth)
+  const { loading, email: userEmail } = useSelector(state => state.auth)
   const navigate = useNavigate();
   const { token } = useParams(); 
 
@@ -19,7 +19,14 @@ export default function RegistrationPage() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
+
+  useEffect(() => {
+    if (userEmail) {
+      setValue("email", userEmail);
+    }
+  }, [userEmail, setValue]);
 
   const emailValidation = (email) => {
     if (!email) {
@@ -92,6 +99,7 @@ export default function RegistrationPage() {
         <label>Email</label>
         <InputField
           name="email"
+          disabled
           {...register("email", { validate: emailValidation })}
         />
         {errors.email && (
