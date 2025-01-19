@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {Link, useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../features/auth/authThunk";
 import FilledBtn from "../../components/FilledBtn";
 import InputField from "../../components/InputField";
 import { CircularProgress } from "@mui/material";
@@ -8,35 +10,36 @@ import "../../styles/AuthForm.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const {register, handleSubmit, formState: { errors }} = useForm();
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [error, setError] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const { loading } = useSelector((state) => state.auth);
 
   const onSubmit = async (data) => {
-    setLoading(true);
     try {
-      // TODO: add log in feature here
-      console.log("Log in success: ", data);
-      setTimeout(() => {
-        setSuccess(true);
-        setTimeout(() => navigate('/'), 1000);
-      }, 1000);
-    } catch (e) {
-      // TODO: handle error 
-      if (error?.response?.status === 400 && error?.response?.data?.message === 'Invalid Credentials') {
+      await dispatch(login(data)).unwrap();
+      setIsSuccess(true); 
+      setTimeout(() => navigate("/dashboard"), 1000);
+    } catch (error) {
+      console.log(error)
+      if (error === "Invalid Credentials") {
         setError("Invalid username or password");
       } else {
-        navigate('/error');
+        navigate("/error");
       }
-      
-      setLoading(false);
-    } 
+    }
   };
 
-  return success ? (
-    <h3>Logged in successfully! Redirecting...</h3>
-  ) : (
+  if (isSuccess) {
+    return <h3>Account logged in successfully! Redirecting...</h3>;
+  }
+
+  return (
     <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
       <h1>Sign in to your account</h1>
       <div className="input-field">
@@ -53,9 +56,8 @@ export default function LoginPage() {
         <label>Password</label>
         <InputField
           name="password"
-          type="password"
-          isPassword={true}
-          {...register("password", {required: "Password is required"},)}
+          isPassword
+          {...register("password", { required: "Password is required" })}
         />
         {errors.password && (
           <p className="auth-error-message">{errors.password.message}</p>
